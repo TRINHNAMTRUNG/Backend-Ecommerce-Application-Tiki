@@ -28,10 +28,11 @@
     "express-fileupload": "1.4.0",
     "joi": "17.7.0",
     "mongodb": "4.13.0",
-    "mongoose": "6.7.2",
-    "mongoose-delete": "0.5.4"
+    "mongoose": "^6.7.2",
+    "mongoose-delete": "^0.5.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
-  }
+  },
+  "type": "module"
 }
