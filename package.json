@@ -23,6 +23,7 @@
   "homepage": "https://github.com/TRINHNAMTRUNG/Backend-Ecommerce-Application-Tiki#readme",
   "dependencies": {
     "api-query-params": "5.4.0",
+    "backend-myfirstapplication": "file:",
     "dotenv": "16.0.3",
     "express": "4.18.2",
     "express-fileupload": "1.4.0",
