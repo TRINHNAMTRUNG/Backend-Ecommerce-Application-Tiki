@@ -23,16 +23,23 @@
   "homepage": "https://github.com/TRINHNAMTRUNG/Backend-Ecommerce-Application-Tiki#readme",
   "dependencies": {
     "api-query-params": "5.4.0",
+    "axios": "^1.7.7",
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^1.41.3",
     "dotenv": "16.0.3",
     "express": "4.18.2",
     "express-fileupload": "1.4.0",
+    "firebase": "^11.0.1",
     "joi": "17.7.0",
+    "lodash": "^4.17.21",
     "mongodb": "4.13.0",
     "mongoose": "^6.7.2",
-    "mongoose-delete": "^0.5.4"
+    "mongoose-delete": "^0.5.4",
+    "multer": "^1.4.5-lts.1",
+    "multer-storage-cloudinary": "^4.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
   },
-  "type": "module"
+  "type": "commonjs"
 }

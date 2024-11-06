@@ -1,21 +1,13 @@
 
 
-import { override } from "joi";
-import mongoose from "mongoose";
-import MongooseDelete from "mongoose-delete";
-import { type } from "os";
+const { Schema, model } = require('mongoose');
+const MongooseDelete = require('mongoose-delete');
 
-const applicableProductsSchema = mongoose.Schema(
-    { productId: mongoose.Schema.Types.ObjectId }
-);
-const conditionsSchema = mongoose.Schema(
-    { minOrderValue: Number }
-)
 
-const couponSchema = mongoose.Schema(
+const couponSchema = new Schema(
     {
-        sellerId: {
-            type: mongoose.Schema.Types.ObjectId,
+        seller: {
+            type: Schema.Types.ObjectId,
             ref: "seller",
             required: true,
         },
@@ -28,28 +20,31 @@ const couponSchema = mongoose.Schema(
             required: true
         },
         endDate: {
+            type: Date,
+            required: true
+        },
+        applicableProducts: [{ type: Schema.Types.ObjectId, ref: 'product', required: true }],
+        usageLimit: {
             type: Number,
             required: true
         },
-        applicableProducts: [{ type: applicableProductsSchema, required: true }],
-        usage_limit: {
-            type: Number,
-            default: -1,
-        },
         conditions: {
-            type: conditionsSchema,
+            minOrderValue: {
+                type: Number
+            },
             required: true
         },
         active: {
             type: Boolean,
-            default: true,
-        }
+            required: true
+        },
     },
     {
-        timeStamp: true
+        timeStamp: true,
+        collection: "Coupon"
     }
 );
 couponSchema.plugin(MongooseDelete, { overrideMethods: "all" });
-const Coupon = mongoose.model(conditionsSchema, "coupon");
+const Coupon = model("coupon", couponSchema);
 
-export default Coupon;
+module.exports = Coupon;

@@ -1,40 +1,23 @@
 
-import MongooseDelete from "mongoose-delete";
-import mongoose from "mongoose";
+const { defaults } = require('joi');
+const { Schema, model } = require('mongoose');
+const MongooseDelete = require('mongoose-delete');
 
-const sizeSchema = mongoose.Schema(
+const productSchema = new Schema(
     {
-        width: { type: Number, required: true },
-        height: { type: Number, required: true },
-        weight: { type: Number, required: true }
-    }
-)
-
-const discountSchema = mongoose.Schema(
-    {
-        name: { type: String, required: true },
-        discountPercent: { type: Number, default: 0 },
-        active: { type: Boolean, required: true },
-        startDate: { type: Date, required: true },
-        endDate: { type: Date, required: true },
-        desc: String,
-    }
-)
-
-const attributeSchema = mongoose.Schema(
-    { name: String, value: String }
-)
-
-const productSchema = mongoose.Schema(
-    {
-        idSeller: {
-            type: mongoose.Schema.Types.ObjectId,
+        seller: {
+            type: Schema.Types.ObjectId,
             ref: "seller",
             required: true
         },
-        idBrand: {
-            type: mongoose.Schema.Types.ObjectId,
+        brand: {
+            type: Schema.Types.ObjectId,
             ref: "brand",
+            required: true
+        },
+        category: {
+            type: Schema.Types.ObjectId,
+            ref: "category",
             required: true
         },
         name: {
@@ -45,32 +28,95 @@ const productSchema = mongoose.Schema(
             type: String,
             required: true
         },
-        originalPrice: {
-            type: Number,
-            required: true
-        },
         price: {
             type: Number,
             required: true
         },
-        discount: discountSchema,
-        quantity_sold: Number,
-        reviewCounts: Number,
-        ratingAverage: Number,
-        favoriteCount: Number,
-        images: [String],
-        videos: [String],
-        size: {
-            type: sizeSchema,
+        promotion: {
+            type: Schema.Types.ObjectId,
+            ref: "promotion"
+        },
+        stock: {
+            type: Number,
             required: true
         },
-        attribute: [attributeSchema]
+        quantitySold: {
+            type: Number,
+            default: 0
+        },
+        reviewCounts: {
+            type: Number,
+            default: 0
+        },
+        ratingAverage: {
+            type: Number,
+            default: 0
+        },
+        favoriteCount: {
+            type: Number,
+            default: 0
+        },
+        images: {
+            type: [String],
+            required: true, // Mảng này cần phải có
+        },
+        madeIn: {
+            type: String,
+            require: true
+        },
+        // videos: [{
+        //     type: String
+        // }],
+        size: {
+            type: {
+                width: {
+                    type: Number,
+                    required: true // Bắt buộc phải có width
+                },
+                height: {
+                    type: Number,
+                    required: true // Bắt buộc phải có height
+                },
+                weight: {
+                    type: Number,
+                    required: true // Bắt buộc phải có weight
+                },
+            },
+            _id: false,
+            required: true // Bắt buộc phải có đối tượng size
+        },
+        warranty: {
+            type: {
+                duration: {
+                    type: Number,
+                    required: true // Thời gian bảo hành, ví dụ: "12 tháng", "2 năm"
+                },
+                form: {
+                    type: String,
+                    enum: ["Hóa đơn", "Phiếu bảo hành", "Tem bảo hành", "Điện tử"],
+                    required: true // Hình thức bảo hành, ví dụ: "bảo hành tại chỗ", "bảo hành theo vùng"
+                }
+            },
+            _id: false
+        },
+        attribute: [{
+            _id: false,
+            name: {
+                type: String,
+                required: true
+            },
+            value: {
+                type: String,
+                required: true
+            }
+        }],
     },
     {
-        timeStamp: true
+        timeStamp: true,
+        collection: "Product"
     }
 );
 productSchema.plugin(MongooseDelete, { overrideMethods: "all" });
-const Product = mongoose.model("product", productSchema);
+const Product = model("product", productSchema);
 
-export default Product;
+module.exports = Product;
