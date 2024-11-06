@@ -1,33 +1,41 @@
 
 
-import mongoose from "mongoose";
-import MongooseDelete from "mongoose-delete";
+const { Schema, model } = require('mongoose');
+const MongooseDelete = require('mongoose-delete');
 
-const accountSchema = mongoose.Schema(
+const accountSchema = new Schema(
     {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "user",
-            required: true
-        },
-        role: {
-            type: String,
-            required: true
-        },
         phoneNumber: {
             type: String,
+            unique: true,
             required: true
         },
         password: {
             type: String,
             required: true
         },
+        role: {
+            type: String,
+            enum: ['admin', 'seller', 'customer'],
+            required: true
+        },
+        email: {
+            type: String,
+            unique: true,
+            required: true
+        },
+        user: {
+            type: Schema.Types.ObjectId,
+            refPath: 'role',
+            required: true,
+        }
     },
     {
-        timeStamp: true
+        timeStamp: true,
+        collection: "Account"
     }
 );
 accountSchema.plugin(MongooseDelete, { overrideMethod: "all" });
-const Account = mongoose.model("account", accountSchema);
+const Account = model("account", accountSchema);
 
-export default accountSchema;
+module.exports = Account;

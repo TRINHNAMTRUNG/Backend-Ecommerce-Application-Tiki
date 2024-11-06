@@ -1,56 +1,33 @@
 
 
-import mongoose from "mongoose";
-import MongooseDelete from "mongoose-delete";
-import { type } from "os";
+const { Schema, model } = require('mongoose');
+const MongooseDelete = require('mongoose-delete');
 
-const productSchema = mongoose.Schema(
+const cartSchema = new Schema(
     {
-        productId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "product",
+        customer: {
+            type: Schema.Types.ObjectId,
+            ref: "customer",
             required: true
         },
-        quantity: {
-            type: Number,
-            default: 1
-        }
-    }
-)
-
-const listProdduct = mongoose.Schema(
-    {
-        sellerId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "seller",
-            required: true
-        },
-        product: [{ type: productSchema, required: true }]
-    }
-)
-
-const cartSchema = mongoose.Schema(
-    {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "user",
-            required: true
-        },
-        itemsCount: {
-            type: Number,
-            default: 0
-        },
-        itemsQty: {
-            type: Number,
-            default: 0
-        },
-        sellers: [listProdduct]
+        listProduct: [{
+            product: {
+                type: Schema.Types.ObjectId,
+                ref: "product",
+                required: true
+            },
+            itemsQty: {
+                type: Number,
+                defaults: 1
+            }
+        }]
     },
     {
-        timeStamp: true
+        timeStamp: true,
+        collation: "Cart"
     }
 );
 cartSchema.plugin(MongooseDelete, { overrideMethods: "all" });
-const Cart = mongoose.model("productCoupon", cartSchema);
+const Cart = model("cart", cartSchema);
 
-export default Cart;
+module.exports = Cart;
