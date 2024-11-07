@@ -1,27 +1,27 @@
 
 
-import mongoose from "mongoose";
-import MongooseDelete from "mongoose-delete";
+const { Schema, model } = require('mongoose');
+const MongooseDelete = require('mongoose-delete');
 
-
-const productCouponSchema = mongoose.Schema(
+const productCouponSchema = new Schema(
     {
-        productId: {
-            type: mongoose.Schema.Types.ObjectId,
+        product: {
+            type: Schema.Types.ObjectId,
             ref: "product",
             required: true
         },
-        couponId: {
-            type: mongoose.Schema.Types.ObjectId,
+        coupon: {
+            type: Schema.Types.ObjectId,
             ref: "coupon",
             required: true
         },
     },
     {
-        timeStamp: true
+        timeStamp: true,
+        collection: "ProductCoupon"
     }
 );
 productCouponSchema.plugin(MongooseDelete, { overrideMethods: "all" });
-const ProductCoupon = mongoose.model("productCoupon", productCouponSchema);
+const ProductCoupon = model("productCoupon", productCouponSchema);
 
-export default ProductCoupon;
+module.exports = ProductCoupon;

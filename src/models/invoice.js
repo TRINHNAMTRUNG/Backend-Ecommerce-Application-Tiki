@@ -12,11 +12,7 @@ const invoiceSchema = mongoose.Schema({
         default: Date.now, // Ngày tạo hóa đơn, mặc định là thời gian hiện tại
         required: true
     },
-    paymentMethod: {
-        type: String,
-        enum: ["Credit Card", "Bank Transfer", "Cash", "Momo", "ZaloPay"], // Các phương thức thanh toán
-        required: true
-    },
+
     paymentStatus: {
         type: String,
         enum: ["Pending", "Completed", "Failed", "Cancelled"], // Trạng thái thanh toán
