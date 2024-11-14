@@ -12,10 +12,13 @@ const categorySchema = new Schema(
         category: {
             type: Schema.Types.ObjectId,
             ref: "category"
+        },
+        image: {
+            type: String
         }
     },
     {
-        timeStamp: true,
+        timestamps: true,
         collection: "Category"
     }
 );

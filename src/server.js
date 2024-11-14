@@ -2,12 +2,15 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const fileUpload = require("express-fileupload");
+// const cors = require('cors');
 
 // Routes
 const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const brandRoutes = require("./routes/brandRoutes");
 const customerRoutes = require("./routes/customerRoutes");
+const authRoutes = require("./routes/authRoutes");
+const otpRoutes = require("./routes/otpRoutes");
 
 const connection = require("../src/configs/database");
 
@@ -21,11 +24,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // phân tích và xử lý yêu cầu http chứa file upload do client định dạng dữ liệu multipart/form-data, cho phép truy cập thông qua req.files
 // app.use(fileUpload());
+// app.use(cors({
+//     origin: 'exp://192.168.0.136:8081', // Địa chỉ IP của máy tính của bạn cùng với cổng frontend
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization']
+// }));
 
 app.use("/v1/api/product", productRoutes);
 app.use("/v1/api/category", categoryRoutes);
 app.use("/v1/api/brand", brandRoutes);
 app.use("/v1/api/customer", customerRoutes);
+app.use("/v1/api/new", authRoutes);
+app.use("/v1/api/otp", otpRoutes);
 
 (async () => {
     try {

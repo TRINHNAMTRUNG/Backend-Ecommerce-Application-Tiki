@@ -1,6 +1,7 @@
 const {
     createProductSvc,
-    getListProductByCatgSvc
+    getListProductByCatgSvc,
+    getListProductConditionsScv
 } = require("../services/productService");
 
 const { formatResBodySuscess, formatResBodyFailed } = require("./fomatResponse");
@@ -52,7 +53,20 @@ const getListProductByCatgCtrl = async (req, res) => {
     }
 }
 
+const getListProductConditionsCtrl = async (req, res) => {
+    try {
+        const { limit, skip } = req.params;
+        const listProduct = await getListProductConditionsScv(limit, skip);
+        return res.status(200)
+            .json(formatResBodySuscess(true, "Get successful list products", listProduct));
+    } catch (error) {
+        return res.status(error.statusCode)
+            .json(formatResBodyFailed(false, "Get failed list products", error.message));
+    }
+}
+
 module.exports = {
     createProductCtrl,
-    getListProductByCatgCtrl
+    getListProductByCatgCtrl,
+    getListProductConditionsCtrl
 }

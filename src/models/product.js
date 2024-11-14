@@ -13,7 +13,6 @@ const productSchema = new Schema(
         brand: {
             type: Schema.Types.ObjectId,
             ref: "brand",
-            required: true
         },
         category: {
             type: Schema.Types.ObjectId,
@@ -61,8 +60,7 @@ const productSchema = new Schema(
             required: true, // Mảng này cần phải có
         },
         madeIn: {
-            type: String,
-            require: true
+            type: String
         },
         // videos: [{
         //     type: String
@@ -112,7 +110,7 @@ const productSchema = new Schema(
         }],
     },
     {
-        timeStamp: true,
+        timestamps: true,
         collection: "Product"
     }
 );

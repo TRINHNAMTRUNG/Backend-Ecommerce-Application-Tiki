@@ -9,24 +9,27 @@ const categorySchemaJoi = joi.object({
         .required()
     ,
     category: joi.string()
-        .optional()
         .custom((value, helpers) => {
             if (value && !isValidObjectId(value)) {
                 return helpers.error("Category must be an ObjectId");
             }
             return value;
         })
+        .optional()
+    ,
+    image: joi.string()
+        .optional()
 })
 
 const createCategorySvc = async (dataCategory) => {
-    if (dataCategory.category === "") {
-        delete dataCategory.category;
-    }
+    // if (dataCategory.category === "") {
+    //     delete dataCategory.category;
+    // }
     const { error } = categorySchemaJoi.validate(dataCategory);
     if (error) {
         throw {
             statusCode: 400,
-            message: error.details[0].map(error => error.message)
+            message: error.details[0].message
         }
     }
     try {
@@ -94,18 +97,31 @@ const getCategoryInTree = (idCategory, tree) => {
 }
 
 const getLeafCategory = (branch, list) => {
+    if (!branch.children || !Array.isArray(branch.children)) {
+        return list; // Ngăn lỗi nếu branch không có children hoặc không phải mảng
+    }
     for (const item of branch.children) {
-        if (item.children.length == 0) {
-            console.log(">>item : ", item);
-            list.push(item);
-        }
-        if (item.children && item.children.length > 0) {
-            getLeafCategory(item.children, list);
+        if (!item.children || item.children.length === 0) {
+            list.push(item._id.toString());
+        } else {
+            getLeafCategory(item, list); // Sử dụng item thay vì item.children
         }
     }
     return list;
 }
 
+
+const getListRootCategorySvc = async () => {
+    try {
+        const listRoot = await Category.find({ category: { $exists: false } });
+        return listRoot;
+    } catch (error) {
+        throw {
+            statusCode: 500,
+            message: 'Internal server error: ' + error.message
+        }
+    }
+}
 
 
 module.exports = {
@@ -113,5 +129,6 @@ module.exports = {
     getCategorySvc,
     // getCategoryByIdSvc
     getCategoryInTree,
-    getLeafCategory
+    getLeafCategory,
+    getListRootCategorySvc
 }

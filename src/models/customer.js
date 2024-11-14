@@ -58,7 +58,7 @@ const customerSchema = new Schema(
         }]
     },
     {
-        timeStamp: true,
+        timestamps: true,
         collection: "Customer"
     }
 );

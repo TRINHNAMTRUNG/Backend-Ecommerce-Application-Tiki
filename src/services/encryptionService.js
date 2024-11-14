@@ -22,7 +22,6 @@ const verifyPassword = async (password, hashedPassword) => {
     }
 };
 
-
 module.exports = {
     hashPassword,
     verifyPassword
