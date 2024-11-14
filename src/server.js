@@ -11,6 +11,12 @@ const brandRoutes = require("./routes/brandRoutes");
 const customerRoutes = require("./routes/customerRoutes");
 const authRoutes = require("./routes/authRoutes");
 const otpRoutes = require("./routes/otpRoutes");
+const sellerRoutes = require("./routes/sellerRoutes");
+const invoiceRoutes = require("./routes/invoiceRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
+const promotionRoutes = require("./routes/promotionRoutes");
+const couponRoutes = require("./routes/couponRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 
 const connection = require("../src/configs/database");
 
@@ -36,6 +42,12 @@ app.use("/v1/api/brand", brandRoutes);
 app.use("/v1/api/customer", customerRoutes);
 app.use("/v1/api/new", authRoutes);
 app.use("/v1/api/otp", otpRoutes);
+app.use("/v1/api/seller", sellerRoutes);
+app.use("/v1/api/invoice", invoiceRoutes);
+app.use("/v1/api/reviews", reviewRoutes);
+app.use("/v1/api/promotion", promotionRoutes);
+app.use("/v1/api/coupon", couponRoutes);
+app.use("/v1/api/cart", cartRoutes);
 
 (async () => {
     try {

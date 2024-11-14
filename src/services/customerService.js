@@ -1,5 +1,3 @@
-
-
 const joi = require("joi");
 const Customer = require("../models/customer");
 const { isValidObjectId } = require("mongoose");
@@ -8,47 +6,36 @@ const cloudinary = require('cloudinary').v2;
 const customerSchemaJoi = joi.object({
     customerName: joi.string()
         .pattern(/^[a-zA-Z_ -]+$/)
-        .required()
-    ,
+        .required(),
     nickName: joi.string()
-        .optional()
-    ,
+        .optional(),
     birthDate: joi.date()
         .iso()
         .less("now")
         .greater("1900-01-01")
-        .optional()
-    ,
+        .optional(),
     nationality: joi.string()
-        .optional()
-    ,
+        .optional(),
     phoneNumber: joi.string()
         .trim()
         .pattern(/^(84|0[3|5|7|8|9])[0-9]{8}$/)
-        .required()
-    ,
+        .required(),
     email: joi.string()
         .trim()
         .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-        .required()
-    ,
+        .required(),
     avatar: joi.string()
-        .optional()
-    ,
+        .optional(),
     address: joi.array()
         .items(joi.object({
             city: joi.string()
-                .required()
-            ,
+                .required(),
             district: joi.string()
-                .required()
-            ,
+                .required(),
             ward: joi.string()
-                .required()
-            ,
+                .required(),
             addressLine: joi.string()
-                .required()
-            ,
+                .required(),
             status: joi.boolean()
                 .required()
         }))
@@ -57,26 +44,22 @@ const customerSchemaJoi = joi.object({
 const customerUpdateSchemaJoi = joi.object({
     customerName: joi.string()
         .pattern(/^[a-zA-Z_ -]+$/)
-        .optional()
-    ,
+        .optional(),
     nickName: joi.string()
-        .optional()
-    ,
+        .optional(),
     birthDate: joi.date()
         .iso()
         .less("now")
         .greater("1900-01-01")
-        .optional()
-    ,
+        .optional(),
     nationality: joi.string()
-        .optional()
-    ,
+        .optional(),
     avatar: joi.string()
         .optional()
 }).unknown(false);
 
 
-const createCustomerSvc = async (dataCustomer) => {
+const createCustomerSvc = async(dataCustomer) => {
     const { error } = customerSchemaJoi.validate(dataCustomer);
     if (error) {
         throw {
@@ -101,7 +84,7 @@ const createCustomerSvc = async (dataCustomer) => {
     }
 }
 
-const getCustomerSvc = async () => {
+const getCustomerSvc = async() => {
     try {
         const listCustomer = await Customer.find({});
         return listCustomer;
@@ -112,7 +95,7 @@ const getCustomerSvc = async () => {
         }
     }
 }
-const getCustomerByIdSvc = async (idCustomer) => {
+const getCustomerByIdSvc = async(idCustomer) => {
 
     if (!isValidObjectId(idCustomer)) {
         throw {
@@ -130,7 +113,7 @@ const getCustomerByIdSvc = async (idCustomer) => {
     return customer;
 }
 
-const updateCustomerSvc = async (dataUpdate) => {
+const updateCustomerSvc = async(dataUpdate) => {
     const idCustomer = dataUpdate.id;
     delete dataUpdate.id;
     console.log("ID: ", idCustomer)
