@@ -1,7 +1,8 @@
 const {
     createProductSvc,
     getListProductByCatgSvc,
-    getListProductConditionsScv
+    getListProductConditionsScv,
+    getListProductDealBookSvc
 } = require("../services/productService");
 
 const { formatResBodySuscess, formatResBodyFailed } = require("./fomatResponse");
@@ -52,6 +53,18 @@ const getListProductByCatgCtrl = async (req, res) => {
             .json(formatResBodyFailed(false, "Get failed list products by category", error.message));
     }
 }
+const getListProductDealBookCtrl = async (req, res) => {
+    try {
+        const idCategory = "672e1c4927462a2f1d9d1547";
+        const { limit, page } = req.query;
+        const listProduct = await getListProductDealBookSvc(idCategory, page, limit);
+        return res.status(200)
+            .json(formatResBodySuscess(true, "Get successful list products by category", listProduct));
+    } catch (error) {
+        return res.status(error.statusCode)
+            .json(formatResBodyFailed(false, "Get failed list products by category", error.message));
+    }
+}
 
 const getListProductConditionsCtrl = async (req, res) => {
     try {
@@ -68,5 +81,6 @@ const getListProductConditionsCtrl = async (req, res) => {
 module.exports = {
     createProductCtrl,
     getListProductByCatgCtrl,
-    getListProductConditionsCtrl
+    getListProductConditionsCtrl,
+    getListProductDealBookCtrl
 }

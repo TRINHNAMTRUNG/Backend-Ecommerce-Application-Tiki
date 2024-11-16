@@ -197,9 +197,40 @@ const getListProductConditionsScv = async (limit, page) => {
         }
     }
 }
+const getListProductDealBookSvc = async (idCategory, page, limit) => {
+    try {
+        const tree = await getCategorySvc();
+        const branch = getCategoryInTree(idCategory, tree);
+        if (branch) {
+            const categoryIds = getLeafCategory(branch, []);
+            const skip = (page - 1) * limit;
+            const listProduct = await Product.find({
+                category: { $in: categoryIds }
+            })
+                .skip(skip)
+                .limit(limit)
+                .sort({ price: 1 })
+            const totalProducts = await Product.countDocuments({
+                category: { $in: categoryIds }
+            });
+            console.log("count: ", totalProducts)
+            return {
+                totalPages: totalProducts <= limit ? 1 : Math.ceil(totalProducts / limit),
+                currentPage: parseInt(page),
+                listProduct
+            };
+        }
+    } catch (error) {
+        throw {
+            statusCode: error.statusCode || 500,
+            message: error.message || 'Internal server error: ' + error.message
+        }
+    }
+}
 
 module.exports = {
     createProductSvc,
     getListProductByCatgSvc,
-    getListProductConditionsScv
+    getListProductConditionsScv,
+    getListProductDealBookSvc
 }

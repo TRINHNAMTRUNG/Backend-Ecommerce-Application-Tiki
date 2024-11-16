@@ -50,7 +50,7 @@ const sendOtpCtrl = async (req, res) => {
                 applicationId: infobipApplicationId,
                 to: phoneNumber,
                 from: "ServiceSMS",
-                messageId: "01A593779D2514426F79686EB0B640EB",
+                messageId: "2334846F84024977192753134B4A7A08",
             },
             {
                 headers: {
@@ -68,13 +68,11 @@ const sendOtpCtrl = async (req, res) => {
 }
 
 const verifyOtpCtrl = async (req, res) => {
-    const { phoneNumber, pin } = req.body;
+    const { pin, pinId } = req.body;
     try {
         const response = await axios.post(
-            `${infobipBaseUrl}/2fa/2/pin/verify`,
+            `${infobipBaseUrl}/2fa/2/pin/${pinId}/verify`,
             {
-                applicationId: infobipApplicationId,
-                to: phoneNumber,
                 pin: pin,
             },
             {
