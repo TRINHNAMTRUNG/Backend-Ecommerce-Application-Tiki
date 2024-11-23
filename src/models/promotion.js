@@ -39,7 +39,7 @@ const promotionSchema = new Schema({
         required: true
     }
 }, {
-    timeStamp: true,
+    timestamps: true,
     collection: "Promotion"
 });
 promotionSchema.plugin(MongooseDelete, { overrideMethods: "all" });

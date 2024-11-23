@@ -188,8 +188,30 @@ const getListProductByCatgSvc = async (idCategory, page, limit) => {
 const getListProductConditionsScv = async (limit, page) => {
     try {
         const skip = (page - 1) * limit;
-        const listProductSort = await Product.find({}).skip(skip).limit(limit).sort({ price: 1 })
-        return listProductSort;
+        const listProduct = await Product.find({}).skip(skip).limit(limit).sort({ price: 1 });
+        const totalProducts = await Product.countDocuments();
+        return {
+            totalPages: totalProducts <= limit ? 1 : Math.ceil(totalProducts / limit),
+            currentPage: parseInt(page),
+            listProduct
+        };
+    } catch (error) {
+        throw {
+            statusCode: 500,
+            message: error.message || 'Internal server error: ' + error.message
+        }
+    }
+}
+const getListProductNewScv = async (limit, page) => {
+    try {
+        const skip = (page - 1) * limit;
+        const listProduct = await Product.find({}).skip(skip).limit(limit).sort({ createdAt: -1, price: 1 });
+        const totalProducts = await Product.countDocuments();
+        return {
+            totalPages: totalProducts <= limit ? 1 : Math.ceil(totalProducts / limit),
+            currentPage: parseInt(page),
+            listProduct
+        };
     } catch (error) {
         throw {
             statusCode: 500,
@@ -227,10 +249,35 @@ const getListProductDealBookSvc = async (idCategory, page, limit) => {
         }
     }
 }
+const getSearchProductSvc = async (name, page, limit) => {
+    try {
+        await Product.collection.createIndex({ name: "text" });
+        const skip = (page - 1) * limit;
+        const listProduct = await Product.find(
+            { $text: { $search: name } }
+        )
+            .skip(skip)
+            .limit(limit);
+        const totalProducts = await Product.countDocuments({ $text: { $search: name } });
+
+        return {
+            totalPages: totalProducts <= limit ? 1 : Math.ceil(totalProducts / limit),
+            currentPage: parseInt(page),
+            listProduct,
+        };
+    } catch (error) {
+        throw {
+            statusCode: error.statusCode || 500,
+            message: error.message || 'Internal server error: ' + error.message,
+        };
+    }
+}
 
 module.exports = {
     createProductSvc,
     getListProductByCatgSvc,
     getListProductConditionsScv,
-    getListProductDealBookSvc
+    getListProductDealBookSvc,
+    getListProductNewScv,
+    getSearchProductSvc
 }

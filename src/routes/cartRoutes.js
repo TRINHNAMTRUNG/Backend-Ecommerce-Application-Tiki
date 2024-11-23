@@ -10,10 +10,12 @@ const {
     getCartByCustomerIdCtrl,
     updateProductQtyCtrl,
     removeProductFromCartCtrl,
+    createCartCtrl
 
 } = require('../controllers/cartController');
 
-router.post('/', addProductToCartCtrl);
+router.put('/', addProductToCartCtrl);
+router.post('/:id', createCartCtrl);
 router.get('/:customerId', getCartByCustomerIdCtrl);
 router.put('/:customerId/:productId/:qty', updateProductQtyCtrl);
 router.delete('/:customerId/:productId', removeProductFromCartCtrl);

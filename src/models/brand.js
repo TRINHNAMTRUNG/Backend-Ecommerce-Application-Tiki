@@ -12,7 +12,7 @@ const brandSchema = new Schema(
         }
     },
     {
-        timeStamp: true,
+        timestamps: true,
         collection: "Brand"
     }
 );

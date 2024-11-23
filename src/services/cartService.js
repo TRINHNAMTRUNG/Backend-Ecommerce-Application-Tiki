@@ -32,7 +32,7 @@ const cartSchemaJoi = joi.object({
  * @param {Object} data - Dữ liệu giỏ hàng cần thêm.
  * @returns {Object} - Giỏ hàng đã được cập nhật.
  */
-const addProductToCart = async(data) => {
+const addProductToCart = async (data) => {
     const { error } = cartSchemaJoi.validate(data);
     if (error) {
         throw {
@@ -72,7 +72,7 @@ const addProductToCart = async(data) => {
  * @param {String} customerId - ID của khách hàng.
  * @returns {Object} - Giỏ hàng của khách hàng.
  */
-const getCartByCustomerId = async(customerId) => {
+const getCartByCustomerId = async (customerId) => {
     if (!isValidObjectId(customerId)) {
         throw {
             statusCode: 400,
@@ -101,7 +101,7 @@ const getCartByCustomerId = async(customerId) => {
  * @param {Number} qty - Số lượng mới.
  * @returns {Object} - Giỏ hàng đã được cập nhật.
  */
-const updateProductQty = async(customerId, productId, qty) => {
+const updateProductQty = async (customerId, productId, qty) => {
     if (!isValidObjectId(customerId) || !isValidObjectId(productId)) {
         throw {
             statusCode: 400,
@@ -144,7 +144,7 @@ const updateProductQty = async(customerId, productId, qty) => {
  * @param {String} productId - ID của sản phẩm.
  * @returns {Object} - Giỏ hàng đã được cập nhật.
  */
-const removeProductFromCart = async(customerId, productId) => {
+const removeProductFromCart = async (customerId, productId) => {
     if (!isValidObjectId(customerId) || !isValidObjectId(productId)) {
         throw {
             statusCode: 400,
@@ -169,9 +169,35 @@ const removeProductFromCart = async(customerId, productId) => {
     return cart.populate("listProduct.product");
 };
 
+const createCartSvc = async (dataCart) => {
+    const { error } = cartSchemaJoi.validate(dataCart);
+    if (error) {
+        throw {
+            message: error.details[0].message,
+            statusCode: 400
+        }
+    }
+    try {
+        const newCart = await Cart.create(dataCart);
+        return newCart;
+    } catch (error) {
+        if (error.code === 11000) {
+            throw {
+                statusCode: 409,
+                message: "Cart already exists for this customer"
+            }
+        }
+        throw {
+            statusCode: 500,
+            message: 'Internal server error: ' + error.message,
+        };
+    }
+}
+
 module.exports = {
     addProductToCart,
     getCartByCustomerId,
     updateProductQty,
     removeProductFromCart,
+    createCartSvc
 };

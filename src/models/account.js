@@ -31,7 +31,7 @@ const accountSchema = new Schema(
         }
     },
     {
-        timeStamp: true,
+        timestamps: true,
         collection: "Account"
     }
 );

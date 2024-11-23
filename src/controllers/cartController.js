@@ -1,13 +1,14 @@
 const Cart = require("../models/cart");
 const { isValidObjectId } = require("mongoose");
-const { addProductToCart, getCartByCustomerId, updateProductQty, removeProductFromCart } = require("../services/cartService");
+const { addProductToCart, getCartByCustomerId, updateProductQty, removeProductFromCart, createCartSvc } = require("../services/cartService");
+const { formatResBodySuscess, formatResBodyFailed } = require("./fomatResponse");
 
 /**
  * Add product to cart.
  * @param {Object} req - The request from the client.
  * @param {Object} res - The response to the client.
  */
-const addProductToCartCtrl = async(req, res) => {
+const addProductToCartCtrl = async (req, res) => {
     try {
         const data = req.body;
         const cart = await addProductToCart(data); // Service to add product to cart
@@ -30,7 +31,7 @@ const addProductToCartCtrl = async(req, res) => {
  * @param {Object} req - The request from the client.
  * @param {Object} res - The response to the client.
  */
-const getCartByCustomerIdCtrl = async(req, res) => {
+const getCartByCustomerIdCtrl = async (req, res) => {
     try {
         const { customerId } = req.params;
         const cart = await getCartByCustomerId(customerId); // Service to get the cart
@@ -53,7 +54,7 @@ const getCartByCustomerIdCtrl = async(req, res) => {
  * @param {Object} req - The request from the client.
  * @param {Object} res - The response to the client.
  */
-const updateProductQtyCtrl = async(req, res) => {
+const updateProductQtyCtrl = async (req, res) => {
     try {
         const { customerId, productId, qty } = req.params;
         const cart = await updateProductQty(customerId, productId, parseInt(qty)); // Service to update the quantity
@@ -76,7 +77,7 @@ const updateProductQtyCtrl = async(req, res) => {
  * @param {Object} req - The request from the client.
  * @param {Object} res - The response to the client.
  */
-const removeProductFromCartCtrl = async(req, res) => {
+const removeProductFromCartCtrl = async (req, res) => {
     try {
         const { customerId, productId } = req.params;
         const cart = await removeProductFromCart(customerId, productId); // Service to remove product
@@ -94,6 +95,19 @@ const removeProductFromCartCtrl = async(req, res) => {
     }
 };
 
+const createCartCtrl = async (req, res) => {
+    try {
+        const dataBrand = {
+            customer: req.params.id,
+            listProduct: []
+        }
+        const newCart = await createCartSvc(dataBrand);
+        return res.status(201).json(formatResBodySuscess(true, "Create successful cart", newCart));
+    } catch (error) {
+        return res.status(error.statusCode).json(formatResBodyFailed(false, "Create failed cart", error.message));
+    }
+}
+
 /**
  * Delete the entire cart of a customer.
  * @param {Object} req - The request from the client.
@@ -105,5 +119,5 @@ module.exports = {
     getCartByCustomerIdCtrl,
     updateProductQtyCtrl,
     removeProductFromCartCtrl,
-
+    createCartCtrl
 };

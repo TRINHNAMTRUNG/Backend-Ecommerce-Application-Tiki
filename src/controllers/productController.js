@@ -2,7 +2,9 @@ const {
     createProductSvc,
     getListProductByCatgSvc,
     getListProductConditionsScv,
-    getListProductDealBookSvc
+    getListProductDealBookSvc,
+    getListProductNewScv,
+    getSearchProductSvc
 } = require("../services/productService");
 
 const { formatResBodySuscess, formatResBodyFailed } = require("./fomatResponse");
@@ -68,8 +70,30 @@ const getListProductDealBookCtrl = async (req, res) => {
 
 const getListProductConditionsCtrl = async (req, res) => {
     try {
-        const { limit, skip } = req.params;
-        const listProduct = await getListProductConditionsScv(limit, skip);
+        const { limit, page } = req.query;
+        const listProduct = await getListProductConditionsScv(limit, page);
+        return res.status(200)
+            .json(formatResBodySuscess(true, "Get successful list products", listProduct));
+    } catch (error) {
+        return res.status(error.statusCode)
+            .json(formatResBodyFailed(false, "Get failed list products", error.message));
+    }
+}
+const getListProductNewCtrl = async (req, res) => {
+    try {
+        const { limit, page } = req.query;
+        const listProduct = await getListProductNewScv(limit, page);
+        return res.status(200)
+            .json(formatResBodySuscess(true, "Get successful list products", listProduct));
+    } catch (error) {
+        return res.status(error.statusCode)
+            .json(formatResBodyFailed(false, "Get failed list products", error.message));
+    }
+}
+const getSearchProductCtrl = async (req, res) => {
+    try {
+        const { name, limit, page } = req.query;
+        const listProduct = await getSearchProductSvc(name, page, limit);
         return res.status(200)
             .json(formatResBodySuscess(true, "Get successful list products", listProduct));
     } catch (error) {
@@ -82,5 +106,7 @@ module.exports = {
     createProductCtrl,
     getListProductByCatgCtrl,
     getListProductConditionsCtrl,
-    getListProductDealBookCtrl
+    getListProductDealBookCtrl,
+    getListProductNewCtrl,
+    getSearchProductCtrl
 }

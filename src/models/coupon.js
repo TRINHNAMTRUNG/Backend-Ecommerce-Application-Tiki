@@ -36,7 +36,7 @@ const couponSchema = new Schema({
         required: true
     },
 }, {
-    timeStamp: true,
+    timestamps: true,
     collection: "Coupon"
 });
 couponSchema.plugin(MongooseDelete, { overrideMethods: "all" });

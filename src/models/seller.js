@@ -52,7 +52,7 @@ const sellerSchema = new Schema({
         required: true
     }
 }, {
-    timeStamp: true,
+    timestamps: true,
     collection: "Seller"
 });
 sellerSchema.plugin(MongooseDelete, { overrideMethod: "all" });

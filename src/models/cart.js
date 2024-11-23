@@ -5,7 +5,8 @@ const cartSchema = new Schema({
     customer: {
         type: Schema.Types.ObjectId,
         ref: "customer",
-        required: true
+        required: true,
+        unique: true,
     },
     listProduct: [{
         product: {
@@ -19,7 +20,7 @@ const cartSchema = new Schema({
         }
     }]
 }, {
-    timestamp: true,
+    timestamps: true,
     collection: "Cart"
 });
 
