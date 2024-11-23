@@ -3,11 +3,6 @@ const { isValidObjectId } = require("mongoose");
 const { addProductToCart, getCartByCustomerId, updateProductQty, removeProductFromCart, createCartSvc } = require("../services/cartService");
 const { formatResBodySuscess, formatResBodyFailed } = require("./fomatResponse");
 
-/**
- * Add product to cart.
- * @param {Object} req - The request from the client.
- * @param {Object} res - The response to the client.
- */
 const addProductToCartCtrl = async (req, res) => {
     try {
         const data = req.body;
@@ -26,11 +21,7 @@ const addProductToCartCtrl = async (req, res) => {
     }
 };
 
-/**
- * Get the cart of a customer.
- * @param {Object} req - The request from the client.
- * @param {Object} res - The response to the client.
- */
+
 const getCartByCustomerIdCtrl = async (req, res) => {
     try {
         const { customerId } = req.params;
@@ -49,11 +40,7 @@ const getCartByCustomerIdCtrl = async (req, res) => {
     }
 };
 
-/**
- * Update the quantity of a product in the cart.
- * @param {Object} req - The request from the client.
- * @param {Object} res - The response to the client.
- */
+
 const updateProductQtyCtrl = async (req, res) => {
     try {
         const { customerId, productId, qty } = req.params;
@@ -72,11 +59,7 @@ const updateProductQtyCtrl = async (req, res) => {
     }
 };
 
-/**
- * Remove a product from the cart.
- * @param {Object} req - The request from the client.
- * @param {Object} res - The response to the client.
- */
+
 const removeProductFromCartCtrl = async (req, res) => {
     try {
         const { customerId, productId } = req.params;
@@ -108,11 +91,6 @@ const createCartCtrl = async (req, res) => {
     }
 }
 
-/**
- * Delete the entire cart of a customer.
- * @param {Object} req - The request from the client.
- * @param {Object} res - The response to the client.
- */
 
 module.exports = {
     addProductToCartCtrl,

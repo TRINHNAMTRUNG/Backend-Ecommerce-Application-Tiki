@@ -1,13 +1,10 @@
-
-
 const Category = require("../models/category");
 const joi = require("joi");
 const { isValidObjectId } = require("mongoose");
 
 const categorySchemaJoi = joi.object({
     name: joi.string()
-        .required()
-    ,
+        .required(),
     category: joi.string()
         .custom((value, helpers) => {
             if (value && !isValidObjectId(value)) {
@@ -15,13 +12,12 @@ const categorySchemaJoi = joi.object({
             }
             return value;
         })
-        .optional()
-    ,
+        .optional(),
     image: joi.string()
         .optional()
 })
 
-const createCategorySvc = async (dataCategory) => {
+const createCategorySvc = async(dataCategory) => {
     // if (dataCategory.category === "") {
     //     delete dataCategory.category;
     // }
@@ -49,7 +45,7 @@ const createCategorySvc = async (dataCategory) => {
     }
 }
 
-const getCategorySvc = async () => {
+const getCategorySvc = async() => {
     const listCategory = await Category.find({}).populate("category").lean();
 
     if (!listCategory.length) {
@@ -58,7 +54,7 @@ const getCategorySvc = async () => {
     const map = {};
     const treeCategory = [];
     listCategory.forEach(category => {
-        map[category._id] = { ...category, children: [] }
+        map[category._id] = {...category, children: [] }
     });
     listCategory.forEach(category => {
         if (category.category) {
@@ -102,7 +98,7 @@ const getLeafCategory = (branch, list) => {
     }
     for (const item of branch.children) {
         if (!item.children || item.children.length === 0) {
-            list.push(item._id.toString());
+            list.push(item);
         } else {
             getLeafCategory(item, list); // Sử dụng item thay vì item.children
         }
@@ -111,7 +107,7 @@ const getLeafCategory = (branch, list) => {
 }
 
 
-const getListRootCategorySvc = async () => {
+const getListRootCategorySvc = async() => {
     try {
         const listRoot = await Category.find({ category: { $exists: false } });
         return listRoot;

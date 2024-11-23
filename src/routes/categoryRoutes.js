@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 
@@ -9,12 +8,14 @@ const upload = multer({ storage });
 const {
     createCategoryCtrl,
     getCategoryCtrl,
-    getListRootCategoryCtrl
+    getListRootCategoryCtrl,
+    getListLeafCategoryCtrl
 } = require("../controllers/categoryController");
 
 router.post("/", upload.single('image'), createCategoryCtrl);
 router.get("/", getCategoryCtrl);
 router.get("/root", getListRootCategoryCtrl);
+router.get("/leaf/:id", getListLeafCategoryCtrl);
 
 
 module.exports = router;

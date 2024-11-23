@@ -42,14 +42,16 @@ app.use("/v1/api/brand", brandRoutes);
 app.use("/v1/api/customer", customerRoutes);
 app.use("/v1/api/new", authRoutes);
 app.use("/v1/api/otp", otpRoutes);
+
 app.use("/v1/api/seller", sellerRoutes);
 app.use("/v1/api/invoice", invoiceRoutes);
 app.use("/v1/api/reviews", reviewRoutes);
 app.use("/v1/api/promotion", promotionRoutes);
 app.use("/v1/api/coupon", couponRoutes);
+
 app.use("/v1/api/cart", cartRoutes);
 
-(async () => {
+(async() => {
     try {
         await connection();
         app.listen(port, hostName, () => {

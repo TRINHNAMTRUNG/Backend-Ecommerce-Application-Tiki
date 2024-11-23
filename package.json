@@ -24,6 +24,7 @@
   "dependencies": {
     "api-query-params": "5.4.0",
     "axios": "^1.7.7",
+    "backend-myfirstapplication": "file:",
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
