@@ -72,7 +72,13 @@ const getCartByCustomerId = async (customerId) => {
     }
 
     const cart = await Cart.findOne({ customer: customerId })
-        .populate("listProduct.product")
+        .populate({
+            path: "listProduct.product", // Populate product từ listProduct
+            populate: {
+                path: "seller", // Populate seller bên trong product
+                select: "nameStore email", // Chọn trường cụ thể trong seller (tùy chọn)
+            },
+        })
         .lean();
 
     if (!cart) {
@@ -129,7 +135,13 @@ const updateProductQty = async (customerId, productId, qty) => {
     }
 
     await cart.save();
-    return cart.populate("listProduct.product");
+    return cart.populate({
+        path: "listProduct.product", // Populate product từ listProduct
+        populate: {
+            path: "seller", // Populate seller bên trong product
+            select: "nameStore email", // Chọn trường cụ thể trong seller (tùy chọn)
+        },
+    });
 };
 
 
